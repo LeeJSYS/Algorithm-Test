@@ -45,7 +45,7 @@
 #         if check == target:
 #             return count
 #         for word in words:
-#             if word not in visited and can_change(word, target):
+#             if word not in visited and can_change(check, word):
 #                 visited.add(word)
 #                 q.append((word, count+1))
 #     return 0
@@ -59,29 +59,27 @@
 #         return True
 #     else:
 #         return False
-from collections import deque
-
-def solution(begin, target, words):
-    if target not in words:
-        return 0
-
-    visited = set()
-    queue = deque([(begin, 0)])  # (현재 단어, 현재까지의 단계 수)
-
-    while queue:
-        current, steps = queue.popleft()
-
-        if current == target:
-            return steps
-
-        for word in words:
-            if word not in visited and can_transform(current, word):
-                visited.add(word)
-                queue.append((word, steps + 1))
-
-    return 0  # 변환 불가
-
-def can_transform(word1, word2):
-    return sum(c1 != c2 for c1, c2 in zip(word1, word2)) == 1
-
     
+from collections import deque
+def solution(begin, target, words):
+    visited=set()
+    q=deque([(0,begin)])
+    while q:
+        cnt,node = q.popleft()
+        if node == target:
+            return cnt
+        for word in words:
+            if word not in visited and can_change(node, word):
+                q.append((cnt+1,word))
+                visited.add(word)
+    return 0
+    
+def can_change(start, end):
+    cnt=0
+    for i in range(len(start)):
+        if start[i]!=end[i]:
+            cnt+=1
+    if cnt==1:
+        return True
+    else:
+        return False
